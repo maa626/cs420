@@ -1,7 +1,7 @@
 meta {
   name: Save
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
@@ -40,7 +40,7 @@ script:pre-request {
   }
   
   // Pick a random length between 10 and 30
-  const stepCount = Math.floor(Math.random() * 21) + 10;
+  const stepCount = 30;
   
   // Slice the first N numbers for uniqueness
   const stepPoints = numberPool.slice(0, stepCount);
