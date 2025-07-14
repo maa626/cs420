@@ -1,0 +1,65 @@
+meta {
+  name: Save
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/rapidsteptest
+  body: none
+  auth: inherit
+}
+
+headers {
+  suresteps-session-token: {{validSessionToken}}
+}
+
+vars:pre-request {
+  startTime: 
+  stopTime: 
+  testTime: 
+  stepPoints: 
+  totalSteps: 
+  deviceId: 
+}
+
+script:pre-request {
+  // Generate start and stop time in milliseconds (e.g., current and +10 to 30 seconds later)
+  const startTime = Date.now();
+  const stopTime = startTime + Math.floor(Math.random() * 20000) + 10000; // +10-30 seconds
+  const testTime = stopTime - startTime;
+  
+  // Generate stepPoints (array of 10 to 30 random integers from 1 to 10)
+  // Create a pool of numbers from 1 to 100
+  const numberPool = Array.from({ length: 100 }, (_, i) => i + 1);
+  
+  // Shuffle the pool using Fisher–Yates shuffle
+  for (let i = numberPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [numberPool[i], numberPool[j]] = [numberPool[j], numberPool[i]];
+  }
+  
+  // Pick a random length between 10 and 30
+  const stepCount = Math.floor(Math.random() * 21) + 10;
+  
+  // Slice the first N numbers for uniqueness
+  const stepPoints = numberPool.slice(0, stepCount);
+  const totalSteps = stepPoints.length;
+  
+  // Generate a random device ID as a string
+  const deviceId = Math.floor(Math.random() * 900) + 100; // 100–999
+  
+  const customerEmail = bru.getVar("userEmail");
+  
+  const body = {
+    "customer": customerEmail,
+    startTime,
+    stopTime,
+    testTime,
+    stepPoints,
+    totalSteps,
+    deviceId: String(deviceId)
+  };
+  
+  req.setBody(body)
+}

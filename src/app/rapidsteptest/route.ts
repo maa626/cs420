@@ -3,15 +3,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import getSessionToken from '../../lib/session-token';
 
-// Schema for customer creation request
-const CreateCustomerSchema = z.object({
-    customerName: z.string().min(1, 'required'),
-    email: z.string().email('invalid email'),
-    region: z.string().min(1, 'required'),
-    phone: z.string().min(1, 'required'),
-    whatsAppPhone: z.string().min(1, 'required'),
-    birthDay: z.string().min(1, 'required'),
-    gender: z.string().default('Male'),
+// Schema for step data
+const StepDataSchema = z.object({
+    customer: z.string().email('invalid email'),
+    startTime: z.number().min(1, 'required'),
+    stepPoints: z.array(z.number()).min(1, 'at least one step point is required'),
+    stopTime: z.number().min(1, 'required'),
+    testTime: z.number().min(1, 'required'),
+    totalSteps: z.number().min(1, 'required'),
+    deviceId: z.string().min(1, 'required'),
 });
 
 export async function POST(request: NextRequest) {
@@ -23,14 +23,13 @@ export async function POST(request: NextRequest) {
 
         // Validate request body
         const body = await request.json();
-        const result = await CreateCustomerSchema.safeParseAsync(body);
-        
+        const result = await StepDataSchema.safeParseAsync(body);
         if (!result.success) {
             return NextResponse.json({ error: result.error.errors[0].message }, { status: 422 });
         }
 
         // Forward request to STEDI API
-        const response = await fetch(`${ENV_VARS.STEDI_API_URL}/customer`, {
+        const response = await fetch(`${ENV_VARS.STEDI_API_URL}/rapidsteptest`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +39,7 @@ export async function POST(request: NextRequest) {
         });
 
         if (!response.ok) {
-            let errorMessage = 'Failed to create customer';
+            let errorMessage = 'Failed to save step data';
             try {
                 const errorData = await response.json();
                 errorMessage = errorData.error || errorMessage;
@@ -50,10 +49,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: errorMessage }, { status: response.status });
         }
 
-        // Return success with 200 status code
-        return new NextResponse(null, { status: 200 });
+        // Return "Saved" as text with 200 status code
+        return new NextResponse('Saved', {
+            status: 200,
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+        });
     } catch (error) {
-        console.error('Failed to create customer:', error);
+        console.error('Failed to save step data:', error);
         return NextResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }
