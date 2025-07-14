@@ -1,7 +1,6 @@
+import { ENV_VARS } from '@/lib/env-vars';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-
-const STEDI_API_URL = process.env.STEDI_API_URL || 'https://dev.stedi.me';
 
 // Schema for user creation request
 const CreateUserSchema = z
@@ -33,7 +32,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Forward request to STEDI API
-        const response = await fetch(`${STEDI_API_URL}/user`, {
+        const response = await fetch(`${ENV_VARS.STEDI_API_URL}/user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
