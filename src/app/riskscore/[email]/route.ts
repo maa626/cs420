@@ -36,8 +36,6 @@ export async function GET(request: NextRequest, { params }: PageProps) {
             }
         });
 
-        console.log(response);
-
         if (!response.ok) {
             let errorMessage = 'Failed to get risk score';
             try {
