@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/riskscore/maa626@example.com
+  body: none
+  auth: inherit
+}
+
+headers {
+  suresteps-session-token: {{validSessionToken}}
+}
