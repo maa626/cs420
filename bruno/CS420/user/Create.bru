@@ -12,9 +12,9 @@ post {
 
 body:json {
   {
-    "userName": "{{randomEmail}}",
-    "email": "{{randomEmail}}",
-    "phone": "{{randomPhone}}",
+    "userName": "{{userEmail}}",
+    "email": "{{userEmail}}",
+    "phone": "{{userPhone}}",
     "region": "US",
     "birthDate": "2000-01-01",
     "password": "{{password}}",
@@ -44,7 +44,7 @@ script:pre-request {
   const phone = `${areaCode}${centralOffice}${lineNumber}`;
   
   // Set variables to use in the request
-  bru.setVar("randomUsername", username);
-  bru.setVar("randomEmail", email);
-  bru.setVar("randomPhone", phone);
+  bru.setVar("userUsername", username);
+  bru.setVar("userEmail", email);
+  bru.setVar("userPhone", phone);
 }

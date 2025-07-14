@@ -2,7 +2,6 @@ import { ENV_VARS } from '@/lib/env-vars';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-
 // Schema for login request
 const LoginSchema = z.object({
     userName: z.string().email('invalid email'),

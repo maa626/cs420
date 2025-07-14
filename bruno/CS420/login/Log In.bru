@@ -1,7 +1,7 @@
 meta {
   name: Log In
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
@@ -12,7 +12,7 @@ post {
 
 body:json {
   {
-    "userName": "{{randomEmail}}",
+    "userName": "{{userEmail}}",
     "password": "{{password}}"
   }
 }
