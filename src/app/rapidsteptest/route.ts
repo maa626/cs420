@@ -8,8 +8,8 @@ const StepDataSchema = z.object({
     customer: z.string().email('invalid email'),
     startTime: z.number().min(1, 'required'),
     stepPoints: z.array(z.number()).min(1, 'at least one step point is required'),
-    stopTime: z.number().min(1, 'required'),
-    testTime: z.number().min(1, 'required'),
+    stopTime: z.optional(z.number().min(1, 'required')),
+    testTime: z.optional(z.number().min(1, 'required')),
     totalSteps: z.number().min(1, 'required'),
     deviceId: z.string().min(1, 'required'),
 });
