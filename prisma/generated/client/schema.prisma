@@ -1,0 +1,117 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  output        = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                          BigInt     @id @default(autoincrement())
+  user_name                   String     @db.VarChar(128)
+  email                       String     @unique @db.VarChar(128)
+  password                    String     @db.VarChar(64)
+  birth_date                  DateTime   @db.Date
+  phone                       String     @unique @db.VarChar(32)
+  region                      String     @db.VarChar(32)
+  agreed_to_terms_of_use_at   DateTime?
+  agreed_to_cookie_policy_at  DateTime?
+  agreed_to_privacy_policy_at DateTime?
+  agreed_to_text_messages_at  DateTime?
+  createdAt                   DateTime   @default(now()) @map("created_at")
+  updatedAt                   DateTime   @updatedAt @map("updated_at")
+  customers                   Customer[]
+  sessions                    Session[]
+
+  @@map("users")
+}
+
+model Device {
+  id          BigInt       @id @default(autoincrement())
+  customer_id BigInt
+  name        String       @db.VarChar(64)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  assessments Assessment[]
+  customers   Customer     @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("devices")
+}
+
+model Assessment {
+  id          BigInt    @id @default(autoincrement())
+  customer_id BigInt
+  deviceId    BigInt    @map("device_id")
+  started_at  DateTime? @default(now())
+  ended_at    DateTime?
+  points      Json
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  customers   Customer  @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  device      Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@map("assessments")
+}
+
+model Customer {
+  id                  BigInt               @id @default(autoincrement())
+  user_id             BigInt
+  name                String               @db.VarChar(64)
+  birth_date          DateTime             @db.Date
+  gender              String               @db.VarChar(64)
+  email               String               @unique @db.VarChar(128)
+  phone               String               @unique @db.VarChar(32)
+  region              String               @db.VarChar(32)
+  whatsapp_phone      String               @unique @db.VarChar(32)
+  consent             Boolean              @default(false)
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @updatedAt @map("updated_at")
+  assessments         Assessment[]
+  users               User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  devices             Device[]
+  riskScores          RiskScore[]
+  consentedClinicians ConsentedClinician[]
+
+  @@map("customers")
+}
+
+model Session {
+  id        BigInt   @id @default(autoincrement())
+  user_id   BigInt
+  token     String   @unique @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  users     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model RiskScore {
+  id          BigInt   @id @default(autoincrement())
+  customer_id BigInt
+  score       Int
+  risk_date   DateTime
+  birth_year  Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  customer Customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("risk_scores")
+}
+
+model ConsentedClinician {
+  id          BigInt   @id @default(autoincrement())
+  customer_id BigInt
+  email       String   @unique @db.VarChar(128)
+  expire_at   DateTime
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  customer Customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("consented_clinicians")
+}
