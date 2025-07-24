@@ -1,9 +1,7 @@
 import { ENV_VARS } from '@/lib/env-vars';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-
-const prisma = new PrismaClient();
 
 // Schema for user creation request
 const CreateUserSchema = z

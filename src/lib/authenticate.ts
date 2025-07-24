@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "./prisma";
 
 export async function authenticate(email: string, password: string, sessionToken: string) {
-    const prisma = new PrismaClient();
-
     const user = await prisma.user.findUnique({
         where: {
             email,
@@ -25,8 +23,6 @@ export async function authenticate(email: string, password: string, sessionToken
 }
 
 export async function auth(sessionToken: string) {
-    const prisma = new PrismaClient();
-
     const session = await prisma.session.findUnique({
         where: {
             token: sessionToken,

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from './prisma';
 
 type Step = {
     customer: string;
@@ -9,8 +9,6 @@ type Step = {
 }
 
 export default async function createStep(step: Step) {
-    const prisma = new PrismaClient();
-
     try {
         const customer = await prisma.customer.findUnique({
             where: {

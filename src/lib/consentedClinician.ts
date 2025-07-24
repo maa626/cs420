@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from './prisma';
 
 export default async function saveConsentedClinician(customerEmail: string, email: string) {
-    const prisma = new PrismaClient();
-
     const customer = await prisma.customer.findUnique({
         where: {
             email: customerEmail,

@@ -1,11 +1,9 @@
 import { ENV_VARS } from '@/lib/env-vars';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '../../lib/authenticate';
 import getSessionToken from '../../lib/session-token';
-
-const prisma = new PrismaClient();
 
 // Schema for customer creation request
 const CreateCustomerSchema = z.object({

@@ -1,10 +1,9 @@
+import prisma from '@/lib/prisma';
 import getSessionToken from '@/lib/session-token';
-import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '../../../lib/authenticate';
 
-const prisma = new PrismaClient();
 const EmailSchema = z.string().email('invalid email');
 
 export async function PATCH(
