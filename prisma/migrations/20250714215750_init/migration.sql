@@ -49,6 +49,7 @@ CREATE TABLE "customers" (
 CREATE TABLE "devices" (
     "id" BIGINT GENERATED ALWAYS AS IDENTITY,
     "customer_id" BIGINT NOT NULL,
+    "name" VARCHAR(64) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
