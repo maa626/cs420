@@ -1,7 +1,12 @@
 import { ENV_VARS } from '@/lib/env-vars';
+import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { auth } from '../../lib/authenticate';
 import getSessionToken from '../../lib/session-token';
+import createStep from '../../lib/steps';
+
+const prisma = new PrismaClient();
 
 // Schema for step data
 const StepDataSchema = z.object({
@@ -19,6 +24,11 @@ export async function POST(request: NextRequest) {
         const sessionToken = getSessionToken(request);
         if (!sessionToken) {
             return NextResponse.json({ error: 'Session token is required' }, { status: 401 });
+        }
+
+        const session = await auth(sessionToken);
+        if (!session) {
+            return NextResponse.json({ error: 'Invalid session token' }, { status: 401 });
         }
 
         // Validate request body
@@ -48,6 +58,14 @@ export async function POST(request: NextRequest) {
             }
             return NextResponse.json({ error: errorMessage }, { status: response.status });
         }
+
+        await createStep({
+            customer: result.data.customer,
+            device_id: result.data.deviceId,
+            started_at: new Date(result.data.startTime),
+            ended_at: new Date(result.data.stopTime ?? result.data.startTime),
+            points: result.data.stepPoints,
+        });
 
         // Return "Saved" as text with 200 status code
         return new NextResponse('Saved', {

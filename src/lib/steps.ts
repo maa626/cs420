@@ -1,0 +1,44 @@
+import { PrismaClient } from "@prisma/client";
+
+type Step = {
+    customer: string;
+    device_id: string;
+    started_at: Date;
+    ended_at: Date;
+    points: Array<number>;
+}
+
+export default async function createStep(step: Step) {
+    const prisma = new PrismaClient();
+
+    const customer = await prisma.customer.findUnique({
+        where: {
+            email: step.customer,
+        },
+    });
+
+    if (!customer) {
+        throw new Error('Customer not found');
+    }
+
+    const device = await prisma.device.findUnique({
+        where: {
+            customer_id: customer.id,
+            name: step.device_id,
+        },
+    });
+
+    if (!device) {
+        throw new Error('Device not found');
+    }
+
+    await prisma.assessment.create({
+        data: {
+            customer_id: customer.id,
+            deviceId: device.id,
+            started_at: step.started_at,
+            ended_at: step.ended_at,
+            points: step.points,
+        },
+    });
+}
