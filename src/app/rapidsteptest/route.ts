@@ -59,13 +59,17 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: errorMessage }, { status: response.status });
         }
 
-        await createStep({
+        const step = await createStep({
             customer: result.data.customer,
             device_id: result.data.deviceId,
             started_at: new Date(result.data.startTime),
             ended_at: new Date(result.data.stopTime ?? result.data.startTime),
             points: result.data.stepPoints,
         });
+
+        if (!step) {
+            return NextResponse.json({ error: 'Failed to save step data' }, { status: 500 });
+        }
 
         // Return "Saved" as text with 200 status code
         return new NextResponse('Saved', {

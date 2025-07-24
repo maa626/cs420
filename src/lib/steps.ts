@@ -11,34 +11,53 @@ type Step = {
 export default async function createStep(step: Step) {
     const prisma = new PrismaClient();
 
-    const customer = await prisma.customer.findUnique({
-        where: {
-            email: step.customer,
-        },
-    });
+    try {
+        const customer = await prisma.customer.findUnique({
+            where: {
+                email: step.customer,
+            },
+        });
+    
+        if (!customer) {
+            throw new Error('Customer not found');
+        }
+    
+        let device = await prisma.device.findFirst({
+            where: {
+                customer_id: customer.id,
+                name: step.device_id,
+            },
+        });
+    
+        if (!device) {
+            await prisma.device.create({
+                data: {
+                    customer_id: customer.id,
+                    name: step.device_id,
+                },
+            });
+            
+            device = await prisma.device.findFirst({
+                where: {
+                    customer_id: customer.id,
+                    name: step.device_id,
+                },
+            });
+        }
+    
+        await prisma.assessment.create({
+            data: {
+                customer_id: customer.id,
+                deviceId: device.id,
+                started_at: step.started_at,
+                ended_at: step.ended_at,
+                points: step.points,
+            },
+        });
 
-    if (!customer) {
-        throw new Error('Customer not found');
+        return step;
+    } catch (error) {
+        console.error(error);
+        return null;
     }
-
-    const device = await prisma.device.findUnique({
-        where: {
-            customer_id: customer.id,
-            name: step.device_id,
-        },
-    });
-
-    if (!device) {
-        throw new Error('Device not found');
-    }
-
-    await prisma.assessment.create({
-        data: {
-            customer_id: customer.id,
-            deviceId: device.id,
-            started_at: step.started_at,
-            ended_at: step.ended_at,
-            points: step.points,
-        },
-    });
 }
