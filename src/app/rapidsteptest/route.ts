@@ -1,12 +1,9 @@
 import { ENV_VARS } from '@/lib/env-vars';
-import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '../../lib/authenticate';
 import getSessionToken from '../../lib/session-token';
 import createStep from '../../lib/steps';
-
-const prisma = new PrismaClient();
 
 // Schema for step data
 const StepDataSchema = z.object({

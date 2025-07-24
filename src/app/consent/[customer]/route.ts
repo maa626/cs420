@@ -9,7 +9,7 @@ const EmailSchema = z.string().email('invalid email');
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { customer: string } }
+    { params }: { params: Promise<{ customer: string }> }
 ) {
     try {
         const sessionToken = getSessionToken(request);
@@ -71,7 +71,7 @@ export async function PATCH(
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { customer: string } }
+    { params }: { params: Promise<{ customer: string }> }
 ) {
     try {
         const sessionToken = getSessionToken(request);

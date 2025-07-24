@@ -10,7 +10,10 @@ const prisma = new PrismaClient();
 const EmailSchema = z.string().email('invalid email');
 
 // PATCH: Add a consented clinician
-export async function PATCH(request: NextRequest, { params }: { params: { customer: string } }) {
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: Promise<{ customer: string }> }
+) {
   try {
     const sessionToken = getSessionToken(request);
     if (!sessionToken) {
@@ -60,7 +63,10 @@ export async function PATCH(request: NextRequest, { params }: { params: { custom
 }
 
 // GET: List all consented clinicians for a customer
-export async function GET(request: NextRequest, { params }: { params: { customer: string } }) {
+export async function GET(
+    request: NextRequest,
+    { params }: { params: Promise<{ customer: string }> }
+) {
   try {
     const sessionToken = getSessionToken(request);
     if (!sessionToken) {

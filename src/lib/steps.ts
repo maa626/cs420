@@ -48,7 +48,7 @@ export default async function createStep(step: Step) {
         await prisma.assessment.create({
             data: {
                 customer_id: customer.id,
-                deviceId: device.id,
+                deviceId: device?.id ?? 0,
                 started_at: step.started_at,
                 ended_at: step.ended_at,
                 points: step.points,
