@@ -56,22 +56,23 @@ model Assessment {
 }
 
 model Customer {
-  id             BigInt       @id @default(autoincrement())
-  user_id        BigInt
-  name           String       @db.VarChar(64)
-  birth_date     DateTime     @db.Date
-  gender         String       @db.VarChar(64)
-  email          String       @unique @db.VarChar(128)
-  phone          String       @unique @db.VarChar(32)
-  region         String       @db.VarChar(32)
-  whatsapp_phone String       @unique @db.VarChar(32)
-  consent        Boolean      @default(false)
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
-  assessments    Assessment[]
-  users          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  devices        Device[]
-  riskScores     RiskScore[]
+  id                   BigInt       @id @default(autoincrement())
+  user_id              BigInt
+  name                 String       @db.VarChar(64)
+  birth_date           DateTime     @db.Date
+  gender               String       @db.VarChar(64)
+  email                String       @unique @db.VarChar(128)
+  phone                String       @unique @db.VarChar(32)
+  region               String       @db.VarChar(32)
+  whatsapp_phone       String       @unique @db.VarChar(32)
+  consent              Boolean      @default(false)
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+  assessments          Assessment[]
+  users                User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  devices              Device[]
+  riskScores           RiskScore[]
+  consentedClinicians  ConsentedClinician[]
 
   @@map("customers")
 }
@@ -99,4 +100,17 @@ model RiskScore {
   customer    Customer  @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 
   @@map("risk_scores")
+}
+
+model ConsentedClinician {
+ id          BigInt @id @default(autoincrement())
+ customer_id BigInt
+ email       String       @unique @db.VarChar(128)
+ expire_at   DateTime
+ createdAt   DateTime  @default(now()) @map("created_at")
+ updatedAt   DateTime  @updatedAt @map("updated_at")
+
+ customer    Customer  @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+ @@map("consented_clinicians")
 }

@@ -1,0 +1,54 @@
+meta {
+  name: Update
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/consentedClinicians/{{userEmail}}
+  body: text
+  auth: none
+}
+
+headers {
+  suresteps-session-token: {{validSessionToken}}
+}
+
+body:text {
+  clinician@gmail.com
+}
+
+tests {
+  test("should return 200 with consent status", function() {
+    expect(response.status).to.equal(200);
+    expect(response.body).to.be.oneOf(["true", "false"]);
+  });
+  
+  test("should return 401 when session token is missing", function() {
+    // This test would need to be run without the session token header
+    expect(response.status).to.equal(401);
+  });
+  
+  test("should return plain text content type", function() {
+    expect(response.headers["content-type"]).to.include("text/plain");
+  });
+}
+
+docs {
+  name: Get Consent to Share Data
+  description: |
+    This endpoint retrieves a user's consent status for sharing data.
+    
+    **Endpoint:** `/consent/:customer`
+    **Method:** GET
+    **Headers:** 
+    - `suresteps.session.token`: Session token for authentication
+    
+    **Response:** "true" or "false" as plain text
+    
+    **Example:**
+    ```bash
+    curl -X GET "{{baseUrl}}/consent/{{customerId}}" \
+      -H "suresteps.session.token: {{sessionToken}}"
+    ```
+}
