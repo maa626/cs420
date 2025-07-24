@@ -1,6 +1,9 @@
 import { ENV_VARS } from '@/lib/env-vars';
+import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+
+const prisma = new PrismaClient();
 
 // Schema for login request
 const LoginSchema = z.object({
@@ -32,6 +35,24 @@ export async function POST(request: NextRequest) {
 
         // Get the session token from response
         const sessionToken = await response.text();
+
+        const user = await prisma.user.findUnique({
+            where: {
+                email: result.data.userName,
+                password: result.data.password,
+            },
+        });
+
+        if (!user) {
+            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+        }
+
+        await prisma.session.create({
+            data: {
+                user_id: user.id,
+                token: sessionToken,
+            },
+        });
 
         // Return the session token as text
         return new NextResponse(sessionToken, {

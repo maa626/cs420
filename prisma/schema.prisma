@@ -22,7 +22,8 @@ model User {
   agreed_to_text_messages_at  DateTime?
   createdAt                   DateTime    @default(now()) @map("created_at")
   updatedAt                   DateTime    @updatedAt @map("updated_at")
-  customers                   customers[]
+  customers                   Customer[]
+  sessions                    Session[]
 
   @@map("users")
 }
@@ -33,7 +34,7 @@ model Device {
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")
   assessments Assessment[]
-  customers   customers    @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  customers   Customer     @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 
   @@map("devices")
 }
@@ -47,13 +48,13 @@ model Assessment {
   points      Json
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
-  customers   customers @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  customers   Customer  @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   device      Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
   @@map("assessments")
 }
 
-model customers {
+model Customer {
   id             BigInt       @id @default(autoincrement())
   user_id        BigInt
   name           String       @db.VarChar(64)
@@ -68,4 +69,17 @@ model customers {
   assessments    Assessment[]
   users          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   devices        Device[]
+
+  @@map("customers")
+}
+
+model Session {
+  id         BigInt    @id @default(autoincrement())
+  user_id    BigInt
+  token      String    @unique @db.VarChar(64)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  users      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }

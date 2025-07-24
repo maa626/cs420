@@ -18,6 +18,17 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
+CREATE TABLE "sessions" (
+    "id" BIGINT GENERATED ALWAYS AS IDENTITY,
+    "user_id" BIGINT NOT NULL,
+    "token" VARCHAR(64) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "customers" (
     "id" BIGINT GENERATED ALWAYS AS IDENTITY,
     "user_id" BIGINT NOT NULL,
@@ -65,6 +76,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "sessions_token_key" ON "sessions"("token");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "customers_email_key" ON "customers"("email");
 
 -- CreateIndex
@@ -72,6 +86,9 @@ CREATE UNIQUE INDEX "customers_phone_key" ON "customers"("phone");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "customers_whatsapp_phone_key" ON "customers"("whatsapp_phone");
+
+-- AddForeignKey
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "customers" ADD CONSTRAINT "customers_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
