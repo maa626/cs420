@@ -65,6 +65,7 @@ model Customer {
   phone          String       @unique @db.VarChar(32)
   region         String       @db.VarChar(32)
   whatsapp_phone String       @unique @db.VarChar(32)
+  consent        Boolean      @default(false)
   createdAt      DateTime     @default(now()) @map("created_at")
   updatedAt      DateTime     @updatedAt @map("updated_at")
   assessments    Assessment[]
