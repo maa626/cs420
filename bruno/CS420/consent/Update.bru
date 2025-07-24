@@ -5,13 +5,17 @@ meta {
 }
 
 patch {
-  url: {{baseUrl}}/consent/{{customerId}}
-  body: none
+  url: {{baseUrl}}/consent/{{userEmail}}
+  body: text
   auth: none
 }
 
 headers {
-  suresteps.session.token: {{validSessionToken}}
+  suresteps-session-token: {{validSessionToken}}
+}
+
+body:text {
+  false
 }
 
 tests {

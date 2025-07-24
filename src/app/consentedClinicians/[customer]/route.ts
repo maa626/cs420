@@ -67,19 +67,44 @@ export async function GET(request: NextRequest, { params }: { params: { customer
       return NextResponse.json({ error: 'Session token is required' }, { status: 401 });
     }
 
-    const { customer } = params;
+    const session = await auth(sessionToken);
+    if (!session) {
+      return NextResponse.json({ error: 'Invalid session token' }, { status: 401 });
+    }
+
+    const { customer: customerEmail } = await params;
+    const result = await EmailSchema.safeParseAsync(customerEmail);
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.message }, { status: 422 });
+    }
+
+    const customer = await prisma.customer.findUnique({
+      where: { email: result.data },
+    });
+
     if (!customer) {
-      return NextResponse.json({ error: 'Customer is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
     }
 
     const clinicians = await prisma.consentedClinician.findMany({
-      where: { customerId: customer },
-      select: { clinicianEmail: true, expiration: true },
+      where: { customer_id: customer.id },
+      select: { email: true, expire_at: true },
     });
 
-    // Format as [[email, expiration], ...]
-    const result = clinicians.map((c: { clinicianEmail: string; expiration: Date }) => [c.clinicianEmail, c.expiration.toISOString()]);
-    return NextResponse.json(result);
+    const cliniciansResult = clinicians.map((c: { email: string; expire_at: Date }) => ({
+      clinicianUsername: c.email,
+      consentExpirationDate: c.expire_at.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      }),
+    }));
+
+    return NextResponse.json(cliniciansResult);
   } catch (error) {
     console.error('Failed to get consented clinicians:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
