@@ -64,8 +64,8 @@ model Customer {
   phone          String       @unique @db.VarChar(32)
   region         String       @db.VarChar(32)
   whatsapp_phone String       @unique @db.VarChar(32)
-  created_at     DateTime     @default(now())
-  updated_at     DateTime
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
   assessments    Assessment[]
   users          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   devices        Device[]

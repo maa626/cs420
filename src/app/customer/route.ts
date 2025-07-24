@@ -1,7 +1,11 @@
 import { ENV_VARS } from '@/lib/env-vars';
+import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { auth } from '../../lib/authenticate';
 import getSessionToken from '../../lib/session-token';
+
+const prisma = new PrismaClient();
 
 // Schema for customer creation request
 const CreateCustomerSchema = z.object({
@@ -19,6 +23,11 @@ export async function POST(request: NextRequest) {
         const sessionToken = getSessionToken(request);
         if (!sessionToken) {
             return NextResponse.json({ error: 'Session token is required' }, { status: 401 });
+        }
+
+        const session = await auth(sessionToken);
+        if (!session) {
+            return NextResponse.json({ error: 'Invalid session token' }, { status: 401 });
         }
 
         // Validate request body
@@ -49,6 +58,19 @@ export async function POST(request: NextRequest) {
             }
             return NextResponse.json({ error: errorMessage }, { status: response.status });
         }
+
+        await prisma.customer.create({
+            data: {
+                user_id: session.user_id,
+                name: result.data.customerName,
+                email: result.data.email,
+                region: result.data.region,
+                phone: result.data.phone,
+                whatsapp_phone: result.data.whatsAppPhone,
+                birth_date: new Date(result.data.birthDay),
+                gender: result.data.gender,
+            },
+        });
 
         // Return success with 200 status code
         return new NextResponse(null, { status: 200 });
