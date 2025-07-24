@@ -1,6 +1,9 @@
 import { ENV_VARS } from '@/lib/env-vars';
+import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+
+const prisma = new PrismaClient();
 
 // Schema for user creation request
 const CreateUserSchema = z
@@ -50,6 +53,21 @@ export async function POST(request: NextRequest) {
             }
             return NextResponse.json({ error: errorMessage }, { status: response.status });
         }
+
+        await prisma.user.create({
+            data: {
+                user_name: result.data.userName,
+                email: result.data.email,
+                password: result.data.password,
+                birth_date: new Date(result.data.birthDate),
+                phone: result.data.phone,
+                region: result.data.region,
+                agreed_to_terms_of_use_at: new Date(result.data.agreedToTermsOfUseDate),
+                agreed_to_cookie_policy_at: new Date(result.data.agreedToCookiePolicyDate),
+                agreed_to_privacy_policy_at: new Date(result.data.agreedToPrivacyPolicyDate),
+                agreed_to_text_messages_at: new Date(result.data.agreedToTextMessageDate),
+            },
+        });
 
         // Return success with 200 status code
         return new NextResponse(null, { status: 200 });

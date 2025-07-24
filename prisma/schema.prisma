@@ -1,127 +1,71 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-}
-
-enum UserType {
-    developer
-    provider
-    standard
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id   String   @id @default(cuid())
-    type UserType @default(standard)
+  id                          BigInt      @id @default(autoincrement())
+  user_name                   String      @db.VarChar(128)
+  email                       String      @unique @db.VarChar(128)
+  password                    String      @db.VarChar(64)
+  birth_date                  DateTime    @db.Date
+  phone                       String      @unique @db.VarChar(32)
+  region                      String      @db.VarChar(32)
+  agreed_to_terms_of_use_at   DateTime?
+  agreed_to_cookie_policy_at  DateTime?
+  agreed_to_privacy_policy_at DateTime?
+  agreed_to_text_messages_at  DateTime?
+  createdAt                   DateTime    @default(now()) @map("created_at")
+  updatedAt                   DateTime    @updatedAt @map("updated_at")
+  customers                   customers[]
 
-    // Auth
-    email         String    @unique @db.VarChar(128)
-    phone         String    @db.VarChar(32)
-    emailVerified DateTime? @map("email_verified")
-    password      String    @db.VarChar(64)
-
-    // Profile
-    firstName   String   @map("first_name") @db.VarChar(64)
-    lastName    String   @map("last_name") @db.VarChar(64)
-    displayName String?  @map("display_name") @db.VarChar(128)
-    dateOfBirth DateTime @map("date_of_birth") @db.Date
-    image       String?  @db.Text
-    timezone    String?  @db.VarChar(32)
-    locale      String?  @db.VarChar(16)
-
-    // Terms & Conditions
-    termsAccepted        DateTime? @map("terms_accepted")
-    privacyAccepted      DateTime? @map("privacy_accepted")
-    cookiesAccepted      DateTime? @map("cookies_accepted")
-    textMessagesAccepted DateTime? @map("text_messages_accepted")
-
-    // Audit
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    // Relations
-    sessions    Session[]
-    assessments Assessment[]
-    Step        Step[]
-
-    @@map("users")
-}
-
-model Session {
-    id     String @id @default(cuid())
-    userId String @map("user_id") @db.VarChar(32)
-
-    // Audit
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    // Relations
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@map("sessions")
+  @@map("users")
 }
 
 model Device {
-    id    String @id @default(cuid())
-    name  String @db.VarChar(64)
-    token String @unique @db.VarChar(64)
+  id          BigInt       @id @default(autoincrement())
+  customer_id BigInt
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  assessments Assessment[]
+  customers   customers    @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 
-    // Audit
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    // Relations
-    assessments Assessment[]
-    steps       Step[]
-
-    @@map("devices")
+  @@map("devices")
 }
 
 model Assessment {
-    id       String    @id @default(cuid())
-    userId   String    @map("user_id") @db.VarChar(32)
-    deviceId String    @map("device_id") @db.VarChar(32)
-    started  DateTime? @default(now())
-    ended    DateTime?
+  id          BigInt    @id @default(autoincrement())
+  customer_id BigInt
+  deviceId    BigInt    @map("device_id")
+  started_at  DateTime? @default(now())
+  ended_at    DateTime?
+  points      Json
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  customers   customers @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  device      Device    @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
-    // Audit
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    // Relations
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
-    steps  Step[]
-
-    @@map("assessments")
+  @@map("assessments")
 }
 
-model Step {
-    id           String  @id @default(cuid())
-    deviceId     String  @map("device_id") @db.VarChar(32)
-    assessmentId String? @map("assessment_id") @db.VarChar(32)
-    userId       String? @map("user_id") @db.VarChar(32)
-
-    points Json
-
-    // Audit
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    // Relations
-    device     Device?     @relation(fields: [deviceId], references: [id], onDelete: Cascade)
-    assessment Assessment? @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-    user       User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@map("steps")
+model customers {
+  id             BigInt       @id @default(autoincrement())
+  user_id        BigInt
+  name           String       @db.VarChar(64)
+  birth_date     DateTime     @db.Date
+  gender         String       @db.VarChar(64)
+  email          String       @unique @db.VarChar(128)
+  phone          String       @unique @db.VarChar(32)
+  region         String       @db.VarChar(32)
+  whatsapp_phone String       @unique @db.VarChar(32)
+  created_at     DateTime     @default(now())
+  updated_at     DateTime
+  assessments    Assessment[]
+  users          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  devices        Device[]
 }
