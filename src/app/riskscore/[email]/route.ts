@@ -1,6 +1,8 @@
 import { ENV_VARS } from '@/lib/env-vars';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { auth } from '../../../lib/authenticate';
+import saveRiskScore from '../../../lib/riskScore';
 import getSessionToken from '../../../lib/session-token';
 
 // Schema for email parameter
@@ -19,6 +21,11 @@ export async function GET(request: NextRequest, { params }: PageProps) {
         const sessionToken = getSessionToken(request);
         if (!sessionToken) {
             return NextResponse.json({ error: 'Session token is required' }, { status: 401 });
+        }
+
+        const session = await auth(sessionToken);
+        if (!session) {
+            return NextResponse.json({ error: 'Invalid session token' }, { status: 401 });
         }
 
         // Get and validate email parameter
@@ -47,8 +54,14 @@ export async function GET(request: NextRequest, { params }: PageProps) {
             return NextResponse.json({ error: errorMessage }, { status: response.status });
         }
 
-        // Get the risk score from response and return it
         const data = await response.json();
+        const riskScore = await saveRiskScore(email, data.score, data.riskDate);
+
+        if (!riskScore) {
+            return NextResponse.json({ error: 'Failed to save risk score' }, { status: 500 });
+        }
+
+        // Get the risk score from response and return it
         return NextResponse.json(data);
     } catch (error) {
         console.error('Failed to get risk score:', error);

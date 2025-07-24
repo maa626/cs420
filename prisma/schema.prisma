@@ -70,6 +70,7 @@ model Customer {
   assessments    Assessment[]
   users          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   devices        Device[]
+  riskScores     RiskScore[]
 
   @@map("customers")
 }
@@ -83,4 +84,18 @@ model Session {
   users     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model RiskScore {
+  id          BigInt    @id @default(autoincrement())
+  customer_id BigInt
+  score       Int
+  risk_date   DateTime 
+  birth_year  Int
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  customer    Customer  @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("risk_scores")
 }
