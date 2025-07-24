@@ -6,7 +6,6 @@ import { auth } from '../../../lib/authenticate';
 
 const prisma = new PrismaClient();
 const EmailSchema = z.string().email('invalid email');
-const ConsentSchema = z.boolean();
 
 export async function PATCH(
     request: NextRequest,
