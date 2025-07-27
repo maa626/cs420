@@ -67,3 +67,53 @@ export async function POST(request: NextRequest) {
         return new NextResponse('Internal Server Error', { status: 500 });
     }
 } 
+
+export async function DELETE(request: NextRequest) {
+    try {
+        const sessionToken = getSessionToken(request);
+        if (!sessionToken) {
+            return new NextResponse('Session token is required', { status: 401 });
+        }
+
+        const session = await auth(sessionToken);
+        if (!session) {
+            return new NextResponse('Invalid session token', { status: 401 });
+        }
+
+        // Validate request body
+        const body = await request.json();
+        const result = await ClinicianAccessRequestSchema.safeParseAsync(body);
+        
+        if (!result.success) {
+            return new NextResponse(result.error.errors[0].message, { status: 422 });
+        }
+
+        // Check if customer exists
+        const customer = await prisma.customer.findUnique({
+            where: { email: result.data.customerEmail }
+        });
+
+        if (!customer) {
+            return new NextResponse('Customer not found', { status: 404 });
+        }
+
+        // Find and delete the access request
+        const deletedRequest = await prisma.clinicianAccessRequest.deleteMany({
+            where: {
+                clinician_username: result.data.clinicianUsername,
+                customer_email: result.data.customerEmail,
+                status: 'pending'
+            }
+        });
+
+        if (deletedRequest.count === 0) {
+            return new NextResponse('Access request not found', { status: 404 });
+        }
+
+        // Return success with 200 status code
+        return new NextResponse("Access request deleted successfully.", { status: 200 });
+    } catch (error) {
+        console.error('Failed to delete clinician access request:', error);
+        return new NextResponse('Internal Server Error', { status: 500 });
+    }
+} 
