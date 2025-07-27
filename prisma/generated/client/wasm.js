@@ -197,6 +197,16 @@ exports.Prisma.ConsentedClinicianScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ClinicianAccessRequestScalarFieldEnum = {
+  id: 'id',
+  clinician_username: 'clinician_username',
+  customer_email: 'customer_email',
+  status: 'status',
+  requestDate: 'requestDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -230,7 +240,8 @@ exports.Prisma.ModelName = {
   Customer: 'Customer',
   Session: 'Session',
   RiskScore: 'RiskScore',
-  ConsentedClinician: 'ConsentedClinician'
+  ConsentedClinician: 'ConsentedClinician',
+  ClinicianAccessRequest: 'ClinicianAccessRequest'
 };
 
 /**
