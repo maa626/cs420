@@ -1,11 +1,12 @@
 meta {
-  name: Get All Clinician Access Requests for a User
+  name: Retrieve
   type: http
   seq: 1
 }
 
 get {
   url: {{baseUrl}}/clinicianAccessRequests/{{userEmail}}
+  body: none
   auth: none
 }
 
@@ -42,4 +43,4 @@ docs {
           "status": "approved"
         }
       ]
-} 
+}

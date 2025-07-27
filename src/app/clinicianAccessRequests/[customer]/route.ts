@@ -5,7 +5,7 @@ import getSessionToken from '../../../lib/session-token';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { customer: string } }
+    { params }: { params: Promise<{ customer: string }> }
 ) {
     try {
         const sessionToken = getSessionToken(request);
@@ -18,7 +18,8 @@ export async function GET(
             return new NextResponse('Invalid session token', { status: 401 });
         }
 
-        const customerEmail = decodeURIComponent(params.customer);
+        let { customer: customerEmail } = await params;
+        customerEmail = decodeURIComponent(customerEmail);
 
         // Check if customer exists
         const customer = await prisma.customer.findUnique({
