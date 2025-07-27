@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         const result = await ClinicianAccessRequestSchema.safeParseAsync(body);
         
         if (!result.success) {
-            return NextResponse.json({ error: result.error.errors[0].message }, { status: 422 });
+            return NextResponse.json({ error: result.error.errors[0].message }, { status: 400 });
         }
 
         // Check if customer exists
@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest) {
         const result = await ClinicianAccessRequestSchema.safeParseAsync(body);
         
         if (!result.success) {
-            return new NextResponse(result.error.errors[0].message, { status: 422 });
+            return new NextResponse(result.error.errors[0].message, { status: 400 });
         }
 
         // Check if customer exists
