@@ -1,0 +1,46 @@
+meta {
+  name: Retrieve
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/clinicianAccessRequests/{{userEmail}}
+  body: none
+  auth: none
+}
+
+headers {
+  suresteps-session-token: {{validSessionToken}}
+}
+
+docs {
+  name: Get All Clinician Access Requests for a User
+  description: |
+    This endpoint retrieves all pending and historical access requests for a specific user, 
+    allowing them to review who has requested access to their data.
+  
+  request:
+    method: GET
+    url: /clinicianAccessRequests/:customer
+    headers:
+      suresteps.session.token: <token>
+  
+  response:
+    status: 200 OK
+    body: |
+      [
+        {
+          "clinicianUsername": "physician1@stedi.com",
+          "customerEmail": "patient@example.com",
+          "requestDate": "Jul 22, 2025, 10:30:00 AM",
+          "status": "pending"
+        },
+        {
+          "clinicianUsername": "physician2@stedi.com", 
+          "customerEmail": "patient@example.com",
+          "requestDate": "Jul 20, 2025, 2:15:00 PM",
+          "status": "approved"
+        }
+      ]
+}
