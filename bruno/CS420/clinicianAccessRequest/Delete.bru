@@ -1,0 +1,43 @@
+meta {
+  name: Delete
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{baseUrl}}/clinicianAccessRequest
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  suresteps-session-token: {{validSessionToken}}
+}
+
+body:json {
+  {
+    "clinicianUsername": "physician1@stedi.com",
+    "customerEmail": "{{userEmail}}"
+  }
+}
+
+docs {
+  name: Delete Clinician Access Request
+  description: |
+    This endpoint allows removal of a pending access request. This is typically used after 
+    a user has approved or denied a request, or when a clinician wants to withdraw their request.
+  
+  request:
+    method: DELETE
+    url: /clinicianAccessRequest
+    headers:
+      suresteps.session.token: <token>
+    body:
+      clinicianUsername: "physician1@stedi.com"
+      customerEmail: "patient@example.com"
+  
+  response:
+    status: 200 OK
+    body: "Access request deleted successfully."
+}
