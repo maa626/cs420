@@ -48,6 +48,11 @@ export type RiskScore = $Result.DefaultSelection<Prisma.$RiskScorePayload>
  * 
  */
 export type ConsentedClinician = $Result.DefaultSelection<Prisma.$ConsentedClinicianPayload>
+/**
+ * Model ClinicianAccessRequest
+ * 
+ */
+export type ClinicianAccessRequest = $Result.DefaultSelection<Prisma.$ClinicianAccessRequestPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -243,6 +248,16 @@ export class PrismaClient<
     * ```
     */
   get consentedClinician(): Prisma.ConsentedClinicianDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clinicianAccessRequest`: Exposes CRUD operations for the **ClinicianAccessRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClinicianAccessRequests
+    * const clinicianAccessRequests = await prisma.clinicianAccessRequest.findMany()
+    * ```
+    */
+  get clinicianAccessRequest(): Prisma.ClinicianAccessRequestDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -689,7 +704,8 @@ export namespace Prisma {
     Customer: 'Customer',
     Session: 'Session',
     RiskScore: 'RiskScore',
-    ConsentedClinician: 'ConsentedClinician'
+    ConsentedClinician: 'ConsentedClinician',
+    ClinicianAccessRequest: 'ClinicianAccessRequest'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -708,7 +724,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "device" | "assessment" | "customer" | "session" | "riskScore" | "consentedClinician"
+      modelProps: "user" | "device" | "assessment" | "customer" | "session" | "riskScore" | "consentedClinician" | "clinicianAccessRequest"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1230,6 +1246,80 @@ export namespace Prisma {
           }
         }
       }
+      ClinicianAccessRequest: {
+        payload: Prisma.$ClinicianAccessRequestPayload<ExtArgs>
+        fields: Prisma.ClinicianAccessRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClinicianAccessRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClinicianAccessRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.ClinicianAccessRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClinicianAccessRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>
+          }
+          findMany: {
+            args: Prisma.ClinicianAccessRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>[]
+          }
+          create: {
+            args: Prisma.ClinicianAccessRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>
+          }
+          createMany: {
+            args: Prisma.ClinicianAccessRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClinicianAccessRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.ClinicianAccessRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>
+          }
+          update: {
+            args: Prisma.ClinicianAccessRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClinicianAccessRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClinicianAccessRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClinicianAccessRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClinicianAccessRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClinicianAccessRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.ClinicianAccessRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClinicianAccessRequest>
+          }
+          groupBy: {
+            args: Prisma.ClinicianAccessRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClinicianAccessRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClinicianAccessRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<ClinicianAccessRequestCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1321,6 +1411,7 @@ export namespace Prisma {
     session?: SessionOmit
     riskScore?: RiskScoreOmit
     consentedClinician?: ConsentedClinicianOmit
+    clinicianAccessRequest?: ClinicianAccessRequestOmit
   }
 
   /* Types for Logging */
@@ -9685,6 +9776,1061 @@ export namespace Prisma {
 
 
   /**
+   * Model ClinicianAccessRequest
+   */
+
+  export type AggregateClinicianAccessRequest = {
+    _count: ClinicianAccessRequestCountAggregateOutputType | null
+    _avg: ClinicianAccessRequestAvgAggregateOutputType | null
+    _sum: ClinicianAccessRequestSumAggregateOutputType | null
+    _min: ClinicianAccessRequestMinAggregateOutputType | null
+    _max: ClinicianAccessRequestMaxAggregateOutputType | null
+  }
+
+  export type ClinicianAccessRequestAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ClinicianAccessRequestSumAggregateOutputType = {
+    id: bigint | null
+  }
+
+  export type ClinicianAccessRequestMinAggregateOutputType = {
+    id: bigint | null
+    clinician_username: string | null
+    customer_email: string | null
+    status: string | null
+    requestDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicianAccessRequestMaxAggregateOutputType = {
+    id: bigint | null
+    clinician_username: string | null
+    customer_email: string | null
+    status: string | null
+    requestDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClinicianAccessRequestCountAggregateOutputType = {
+    id: number
+    clinician_username: number
+    customer_email: number
+    status: number
+    requestDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ClinicianAccessRequestAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ClinicianAccessRequestSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ClinicianAccessRequestMinAggregateInputType = {
+    id?: true
+    clinician_username?: true
+    customer_email?: true
+    status?: true
+    requestDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicianAccessRequestMaxAggregateInputType = {
+    id?: true
+    clinician_username?: true
+    customer_email?: true
+    status?: true
+    requestDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClinicianAccessRequestCountAggregateInputType = {
+    id?: true
+    clinician_username?: true
+    customer_email?: true
+    status?: true
+    requestDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ClinicianAccessRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicianAccessRequest to aggregate.
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicianAccessRequests to fetch.
+     */
+    orderBy?: ClinicianAccessRequestOrderByWithRelationInput | ClinicianAccessRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClinicianAccessRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicianAccessRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicianAccessRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClinicianAccessRequests
+    **/
+    _count?: true | ClinicianAccessRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClinicianAccessRequestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClinicianAccessRequestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClinicianAccessRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClinicianAccessRequestMaxAggregateInputType
+  }
+
+  export type GetClinicianAccessRequestAggregateType<T extends ClinicianAccessRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateClinicianAccessRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClinicianAccessRequest[P]>
+      : GetScalarType<T[P], AggregateClinicianAccessRequest[P]>
+  }
+
+
+
+
+  export type ClinicianAccessRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClinicianAccessRequestWhereInput
+    orderBy?: ClinicianAccessRequestOrderByWithAggregationInput | ClinicianAccessRequestOrderByWithAggregationInput[]
+    by: ClinicianAccessRequestScalarFieldEnum[] | ClinicianAccessRequestScalarFieldEnum
+    having?: ClinicianAccessRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClinicianAccessRequestCountAggregateInputType | true
+    _avg?: ClinicianAccessRequestAvgAggregateInputType
+    _sum?: ClinicianAccessRequestSumAggregateInputType
+    _min?: ClinicianAccessRequestMinAggregateInputType
+    _max?: ClinicianAccessRequestMaxAggregateInputType
+  }
+
+  export type ClinicianAccessRequestGroupByOutputType = {
+    id: bigint
+    clinician_username: string
+    customer_email: string
+    status: string
+    requestDate: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: ClinicianAccessRequestCountAggregateOutputType | null
+    _avg: ClinicianAccessRequestAvgAggregateOutputType | null
+    _sum: ClinicianAccessRequestSumAggregateOutputType | null
+    _min: ClinicianAccessRequestMinAggregateOutputType | null
+    _max: ClinicianAccessRequestMaxAggregateOutputType | null
+  }
+
+  type GetClinicianAccessRequestGroupByPayload<T extends ClinicianAccessRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClinicianAccessRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClinicianAccessRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClinicianAccessRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], ClinicianAccessRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClinicianAccessRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    clinician_username?: boolean
+    customer_email?: boolean
+    status?: boolean
+    requestDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["clinicianAccessRequest"]>
+
+  export type ClinicianAccessRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    clinician_username?: boolean
+    customer_email?: boolean
+    status?: boolean
+    requestDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["clinicianAccessRequest"]>
+
+  export type ClinicianAccessRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    clinician_username?: boolean
+    customer_email?: boolean
+    status?: boolean
+    requestDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["clinicianAccessRequest"]>
+
+  export type ClinicianAccessRequestSelectScalar = {
+    id?: boolean
+    clinician_username?: boolean
+    customer_email?: boolean
+    status?: boolean
+    requestDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ClinicianAccessRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clinician_username" | "customer_email" | "status" | "requestDate" | "createdAt" | "updatedAt", ExtArgs["result"]["clinicianAccessRequest"]>
+
+  export type $ClinicianAccessRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClinicianAccessRequest"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: bigint
+      clinician_username: string
+      customer_email: string
+      status: string
+      requestDate: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["clinicianAccessRequest"]>
+    composites: {}
+  }
+
+  type ClinicianAccessRequestGetPayload<S extends boolean | null | undefined | ClinicianAccessRequestDefaultArgs> = $Result.GetResult<Prisma.$ClinicianAccessRequestPayload, S>
+
+  type ClinicianAccessRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClinicianAccessRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClinicianAccessRequestCountAggregateInputType | true
+    }
+
+  export interface ClinicianAccessRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClinicianAccessRequest'], meta: { name: 'ClinicianAccessRequest' } }
+    /**
+     * Find zero or one ClinicianAccessRequest that matches the filter.
+     * @param {ClinicianAccessRequestFindUniqueArgs} args - Arguments to find a ClinicianAccessRequest
+     * @example
+     * // Get one ClinicianAccessRequest
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClinicianAccessRequestFindUniqueArgs>(args: SelectSubset<T, ClinicianAccessRequestFindUniqueArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClinicianAccessRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClinicianAccessRequestFindUniqueOrThrowArgs} args - Arguments to find a ClinicianAccessRequest
+     * @example
+     * // Get one ClinicianAccessRequest
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClinicianAccessRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, ClinicianAccessRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClinicianAccessRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestFindFirstArgs} args - Arguments to find a ClinicianAccessRequest
+     * @example
+     * // Get one ClinicianAccessRequest
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClinicianAccessRequestFindFirstArgs>(args?: SelectSubset<T, ClinicianAccessRequestFindFirstArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClinicianAccessRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestFindFirstOrThrowArgs} args - Arguments to find a ClinicianAccessRequest
+     * @example
+     * // Get one ClinicianAccessRequest
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClinicianAccessRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, ClinicianAccessRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClinicianAccessRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClinicianAccessRequests
+     * const clinicianAccessRequests = await prisma.clinicianAccessRequest.findMany()
+     * 
+     * // Get first 10 ClinicianAccessRequests
+     * const clinicianAccessRequests = await prisma.clinicianAccessRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clinicianAccessRequestWithIdOnly = await prisma.clinicianAccessRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClinicianAccessRequestFindManyArgs>(args?: SelectSubset<T, ClinicianAccessRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClinicianAccessRequest.
+     * @param {ClinicianAccessRequestCreateArgs} args - Arguments to create a ClinicianAccessRequest.
+     * @example
+     * // Create one ClinicianAccessRequest
+     * const ClinicianAccessRequest = await prisma.clinicianAccessRequest.create({
+     *   data: {
+     *     // ... data to create a ClinicianAccessRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClinicianAccessRequestCreateArgs>(args: SelectSubset<T, ClinicianAccessRequestCreateArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClinicianAccessRequests.
+     * @param {ClinicianAccessRequestCreateManyArgs} args - Arguments to create many ClinicianAccessRequests.
+     * @example
+     * // Create many ClinicianAccessRequests
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClinicianAccessRequestCreateManyArgs>(args?: SelectSubset<T, ClinicianAccessRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClinicianAccessRequests and returns the data saved in the database.
+     * @param {ClinicianAccessRequestCreateManyAndReturnArgs} args - Arguments to create many ClinicianAccessRequests.
+     * @example
+     * // Create many ClinicianAccessRequests
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClinicianAccessRequests and only return the `id`
+     * const clinicianAccessRequestWithIdOnly = await prisma.clinicianAccessRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClinicianAccessRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, ClinicianAccessRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClinicianAccessRequest.
+     * @param {ClinicianAccessRequestDeleteArgs} args - Arguments to delete one ClinicianAccessRequest.
+     * @example
+     * // Delete one ClinicianAccessRequest
+     * const ClinicianAccessRequest = await prisma.clinicianAccessRequest.delete({
+     *   where: {
+     *     // ... filter to delete one ClinicianAccessRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClinicianAccessRequestDeleteArgs>(args: SelectSubset<T, ClinicianAccessRequestDeleteArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClinicianAccessRequest.
+     * @param {ClinicianAccessRequestUpdateArgs} args - Arguments to update one ClinicianAccessRequest.
+     * @example
+     * // Update one ClinicianAccessRequest
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClinicianAccessRequestUpdateArgs>(args: SelectSubset<T, ClinicianAccessRequestUpdateArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClinicianAccessRequests.
+     * @param {ClinicianAccessRequestDeleteManyArgs} args - Arguments to filter ClinicianAccessRequests to delete.
+     * @example
+     * // Delete a few ClinicianAccessRequests
+     * const { count } = await prisma.clinicianAccessRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClinicianAccessRequestDeleteManyArgs>(args?: SelectSubset<T, ClinicianAccessRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicianAccessRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClinicianAccessRequests
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClinicianAccessRequestUpdateManyArgs>(args: SelectSubset<T, ClinicianAccessRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClinicianAccessRequests and returns the data updated in the database.
+     * @param {ClinicianAccessRequestUpdateManyAndReturnArgs} args - Arguments to update many ClinicianAccessRequests.
+     * @example
+     * // Update many ClinicianAccessRequests
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClinicianAccessRequests and only return the `id`
+     * const clinicianAccessRequestWithIdOnly = await prisma.clinicianAccessRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClinicianAccessRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, ClinicianAccessRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClinicianAccessRequest.
+     * @param {ClinicianAccessRequestUpsertArgs} args - Arguments to update or create a ClinicianAccessRequest.
+     * @example
+     * // Update or create a ClinicianAccessRequest
+     * const clinicianAccessRequest = await prisma.clinicianAccessRequest.upsert({
+     *   create: {
+     *     // ... data to create a ClinicianAccessRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClinicianAccessRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClinicianAccessRequestUpsertArgs>(args: SelectSubset<T, ClinicianAccessRequestUpsertArgs<ExtArgs>>): Prisma__ClinicianAccessRequestClient<$Result.GetResult<Prisma.$ClinicianAccessRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClinicianAccessRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestCountArgs} args - Arguments to filter ClinicianAccessRequests to count.
+     * @example
+     * // Count the number of ClinicianAccessRequests
+     * const count = await prisma.clinicianAccessRequest.count({
+     *   where: {
+     *     // ... the filter for the ClinicianAccessRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClinicianAccessRequestCountArgs>(
+      args?: Subset<T, ClinicianAccessRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClinicianAccessRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClinicianAccessRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClinicianAccessRequestAggregateArgs>(args: Subset<T, ClinicianAccessRequestAggregateArgs>): Prisma.PrismaPromise<GetClinicianAccessRequestAggregateType<T>>
+
+    /**
+     * Group by ClinicianAccessRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClinicianAccessRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClinicianAccessRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClinicianAccessRequestGroupByArgs['orderBy'] }
+        : { orderBy?: ClinicianAccessRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClinicianAccessRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClinicianAccessRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClinicianAccessRequest model
+   */
+  readonly fields: ClinicianAccessRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClinicianAccessRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClinicianAccessRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClinicianAccessRequest model
+   */
+  interface ClinicianAccessRequestFieldRefs {
+    readonly id: FieldRef<"ClinicianAccessRequest", 'BigInt'>
+    readonly clinician_username: FieldRef<"ClinicianAccessRequest", 'String'>
+    readonly customer_email: FieldRef<"ClinicianAccessRequest", 'String'>
+    readonly status: FieldRef<"ClinicianAccessRequest", 'String'>
+    readonly requestDate: FieldRef<"ClinicianAccessRequest", 'DateTime'>
+    readonly createdAt: FieldRef<"ClinicianAccessRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClinicianAccessRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClinicianAccessRequest findUnique
+   */
+  export type ClinicianAccessRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicianAccessRequest to fetch.
+     */
+    where: ClinicianAccessRequestWhereUniqueInput
+  }
+
+  /**
+   * ClinicianAccessRequest findUniqueOrThrow
+   */
+  export type ClinicianAccessRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicianAccessRequest to fetch.
+     */
+    where: ClinicianAccessRequestWhereUniqueInput
+  }
+
+  /**
+   * ClinicianAccessRequest findFirst
+   */
+  export type ClinicianAccessRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicianAccessRequest to fetch.
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicianAccessRequests to fetch.
+     */
+    orderBy?: ClinicianAccessRequestOrderByWithRelationInput | ClinicianAccessRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicianAccessRequests.
+     */
+    cursor?: ClinicianAccessRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicianAccessRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicianAccessRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicianAccessRequests.
+     */
+    distinct?: ClinicianAccessRequestScalarFieldEnum | ClinicianAccessRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicianAccessRequest findFirstOrThrow
+   */
+  export type ClinicianAccessRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicianAccessRequest to fetch.
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicianAccessRequests to fetch.
+     */
+    orderBy?: ClinicianAccessRequestOrderByWithRelationInput | ClinicianAccessRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClinicianAccessRequests.
+     */
+    cursor?: ClinicianAccessRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicianAccessRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicianAccessRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClinicianAccessRequests.
+     */
+    distinct?: ClinicianAccessRequestScalarFieldEnum | ClinicianAccessRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicianAccessRequest findMany
+   */
+  export type ClinicianAccessRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which ClinicianAccessRequests to fetch.
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClinicianAccessRequests to fetch.
+     */
+    orderBy?: ClinicianAccessRequestOrderByWithRelationInput | ClinicianAccessRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClinicianAccessRequests.
+     */
+    cursor?: ClinicianAccessRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClinicianAccessRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClinicianAccessRequests.
+     */
+    skip?: number
+    distinct?: ClinicianAccessRequestScalarFieldEnum | ClinicianAccessRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ClinicianAccessRequest create
+   */
+  export type ClinicianAccessRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ClinicianAccessRequest.
+     */
+    data: XOR<ClinicianAccessRequestCreateInput, ClinicianAccessRequestUncheckedCreateInput>
+  }
+
+  /**
+   * ClinicianAccessRequest createMany
+   */
+  export type ClinicianAccessRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClinicianAccessRequests.
+     */
+    data: ClinicianAccessRequestCreateManyInput | ClinicianAccessRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicianAccessRequest createManyAndReturn
+   */
+  export type ClinicianAccessRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClinicianAccessRequests.
+     */
+    data: ClinicianAccessRequestCreateManyInput | ClinicianAccessRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClinicianAccessRequest update
+   */
+  export type ClinicianAccessRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ClinicianAccessRequest.
+     */
+    data: XOR<ClinicianAccessRequestUpdateInput, ClinicianAccessRequestUncheckedUpdateInput>
+    /**
+     * Choose, which ClinicianAccessRequest to update.
+     */
+    where: ClinicianAccessRequestWhereUniqueInput
+  }
+
+  /**
+   * ClinicianAccessRequest updateMany
+   */
+  export type ClinicianAccessRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClinicianAccessRequests.
+     */
+    data: XOR<ClinicianAccessRequestUpdateManyMutationInput, ClinicianAccessRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicianAccessRequests to update
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * Limit how many ClinicianAccessRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClinicianAccessRequest updateManyAndReturn
+   */
+  export type ClinicianAccessRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update ClinicianAccessRequests.
+     */
+    data: XOR<ClinicianAccessRequestUpdateManyMutationInput, ClinicianAccessRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which ClinicianAccessRequests to update
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * Limit how many ClinicianAccessRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClinicianAccessRequest upsert
+   */
+  export type ClinicianAccessRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ClinicianAccessRequest to update in case it exists.
+     */
+    where: ClinicianAccessRequestWhereUniqueInput
+    /**
+     * In case the ClinicianAccessRequest found by the `where` argument doesn't exist, create a new ClinicianAccessRequest with this data.
+     */
+    create: XOR<ClinicianAccessRequestCreateInput, ClinicianAccessRequestUncheckedCreateInput>
+    /**
+     * In case the ClinicianAccessRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClinicianAccessRequestUpdateInput, ClinicianAccessRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * ClinicianAccessRequest delete
+   */
+  export type ClinicianAccessRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+    /**
+     * Filter which ClinicianAccessRequest to delete.
+     */
+    where: ClinicianAccessRequestWhereUniqueInput
+  }
+
+  /**
+   * ClinicianAccessRequest deleteMany
+   */
+  export type ClinicianAccessRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClinicianAccessRequests to delete
+     */
+    where?: ClinicianAccessRequestWhereInput
+    /**
+     * Limit how many ClinicianAccessRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClinicianAccessRequest without action
+   */
+  export type ClinicianAccessRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClinicianAccessRequest
+     */
+    select?: ClinicianAccessRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClinicianAccessRequest
+     */
+    omit?: ClinicianAccessRequestOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9794,6 +10940,19 @@ export namespace Prisma {
   };
 
   export type ConsentedClinicianScalarFieldEnum = (typeof ConsentedClinicianScalarFieldEnum)[keyof typeof ConsentedClinicianScalarFieldEnum]
+
+
+  export const ClinicianAccessRequestScalarFieldEnum: {
+    id: 'id',
+    clinician_username: 'clinician_username',
+    customer_email: 'customer_email',
+    status: 'status',
+    requestDate: 'requestDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ClinicianAccessRequestScalarFieldEnum = (typeof ClinicianAccessRequestScalarFieldEnum)[keyof typeof ClinicianAccessRequestScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10460,6 +11619,70 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ConsentedClinician"> | Date | string
   }
 
+  export type ClinicianAccessRequestWhereInput = {
+    AND?: ClinicianAccessRequestWhereInput | ClinicianAccessRequestWhereInput[]
+    OR?: ClinicianAccessRequestWhereInput[]
+    NOT?: ClinicianAccessRequestWhereInput | ClinicianAccessRequestWhereInput[]
+    id?: BigIntFilter<"ClinicianAccessRequest"> | bigint | number
+    clinician_username?: StringFilter<"ClinicianAccessRequest"> | string
+    customer_email?: StringFilter<"ClinicianAccessRequest"> | string
+    status?: StringFilter<"ClinicianAccessRequest"> | string
+    requestDate?: DateTimeFilter<"ClinicianAccessRequest"> | Date | string
+    createdAt?: DateTimeFilter<"ClinicianAccessRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicianAccessRequest"> | Date | string
+  }
+
+  export type ClinicianAccessRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    clinician_username?: SortOrder
+    customer_email?: SortOrder
+    status?: SortOrder
+    requestDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicianAccessRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: bigint | number
+    AND?: ClinicianAccessRequestWhereInput | ClinicianAccessRequestWhereInput[]
+    OR?: ClinicianAccessRequestWhereInput[]
+    NOT?: ClinicianAccessRequestWhereInput | ClinicianAccessRequestWhereInput[]
+    clinician_username?: StringFilter<"ClinicianAccessRequest"> | string
+    customer_email?: StringFilter<"ClinicianAccessRequest"> | string
+    status?: StringFilter<"ClinicianAccessRequest"> | string
+    requestDate?: DateTimeFilter<"ClinicianAccessRequest"> | Date | string
+    createdAt?: DateTimeFilter<"ClinicianAccessRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ClinicianAccessRequest"> | Date | string
+  }, "id">
+
+  export type ClinicianAccessRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    clinician_username?: SortOrder
+    customer_email?: SortOrder
+    status?: SortOrder
+    requestDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ClinicianAccessRequestCountOrderByAggregateInput
+    _avg?: ClinicianAccessRequestAvgOrderByAggregateInput
+    _max?: ClinicianAccessRequestMaxOrderByAggregateInput
+    _min?: ClinicianAccessRequestMinOrderByAggregateInput
+    _sum?: ClinicianAccessRequestSumOrderByAggregateInput
+  }
+
+  export type ClinicianAccessRequestScalarWhereWithAggregatesInput = {
+    AND?: ClinicianAccessRequestScalarWhereWithAggregatesInput | ClinicianAccessRequestScalarWhereWithAggregatesInput[]
+    OR?: ClinicianAccessRequestScalarWhereWithAggregatesInput[]
+    NOT?: ClinicianAccessRequestScalarWhereWithAggregatesInput | ClinicianAccessRequestScalarWhereWithAggregatesInput[]
+    id?: BigIntWithAggregatesFilter<"ClinicianAccessRequest"> | bigint | number
+    clinician_username?: StringWithAggregatesFilter<"ClinicianAccessRequest"> | string
+    customer_email?: StringWithAggregatesFilter<"ClinicianAccessRequest"> | string
+    status?: StringWithAggregatesFilter<"ClinicianAccessRequest"> | string
+    requestDate?: DateTimeWithAggregatesFilter<"ClinicianAccessRequest"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ClinicianAccessRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClinicianAccessRequest"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: bigint | number
     user_name: string
@@ -11016,6 +12239,76 @@ export namespace Prisma {
     customer_id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     expire_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicianAccessRequestCreateInput = {
+    id?: bigint | number
+    clinician_username: string
+    customer_email: string
+    status?: string
+    requestDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicianAccessRequestUncheckedCreateInput = {
+    id?: bigint | number
+    clinician_username: string
+    customer_email: string
+    status?: string
+    requestDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicianAccessRequestUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    clinician_username?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicianAccessRequestUncheckedUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    clinician_username?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicianAccessRequestCreateManyInput = {
+    id?: bigint | number
+    clinician_username: string
+    customer_email: string
+    status?: string
+    requestDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClinicianAccessRequestUpdateManyMutationInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    clinician_username?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClinicianAccessRequestUncheckedUpdateManyInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    clinician_username?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    requestDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11600,6 +12893,44 @@ export namespace Prisma {
   export type ConsentedClinicianSumOrderByAggregateInput = {
     id?: SortOrder
     customer_id?: SortOrder
+  }
+
+  export type ClinicianAccessRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    clinician_username?: SortOrder
+    customer_email?: SortOrder
+    status?: SortOrder
+    requestDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicianAccessRequestAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ClinicianAccessRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    clinician_username?: SortOrder
+    customer_email?: SortOrder
+    status?: SortOrder
+    requestDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicianAccessRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    clinician_username?: SortOrder
+    customer_email?: SortOrder
+    status?: SortOrder
+    requestDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClinicianAccessRequestSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type CustomerCreateNestedManyWithoutUsersInput = {

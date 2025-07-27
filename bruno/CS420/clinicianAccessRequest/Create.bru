@@ -1,0 +1,43 @@
+meta {
+  name: Create Clinician Access Request
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/clinicianAccessRequest
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  suresteps-session-token: {{validSessionToken}}
+}
+
+body:json {
+  {
+    "clinicianUsername": "physician1@stedi.com",
+    "customerEmail": "{{userEmail}}"
+  }
+}
+
+docs {
+  name: Create Clinician Access Request
+  description: |
+    This endpoint allows a clinician to request access to a user's data. 
+    The request should be stored with both clinician and user identifiers for tracking purposes.
+  
+  request:
+    method: POST
+    url: /clinicianAccessRequest
+    headers:
+      suresteps.session.token: <token>
+    body:
+      clinicianUsername: "physician1@stedi.com"
+      customerEmail: "patient@example.com"
+  
+  response:
+    status: 201 Created
+    body: "Access request submitted successfully."
+}

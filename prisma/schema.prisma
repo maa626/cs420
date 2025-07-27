@@ -115,3 +115,15 @@ model ConsentedClinician {
 
  @@map("consented_clinicians")
 }
+
+model ClinicianAccessRequest {
+  id                  BigInt   @id @default(autoincrement())
+  clinician_username  String   @db.VarChar(128)
+  customer_email      String   @db.VarChar(128)
+  status              String   @default("pending") @db.VarChar(32) // pending, approved, denied
+  requestDate         DateTime @default(now()) @map("requested_date")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("clinician_access_requests")
+}
