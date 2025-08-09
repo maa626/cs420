@@ -6,7 +6,7 @@ import styles from './page.module.css';
 export default function TestCallPage() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<any>(null);
+    const [result, setResult] = useState<Record<string, unknown> | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const initiateCall = async () => {
@@ -35,7 +35,7 @@ export default function TestCallPage() {
             } else {
                 setError(data.error || 'Failed to initiate call');
             }
-        } catch (err) {
+        } catch {
             setError('Network error occurred');
         } finally {
             setIsLoading(false);
@@ -55,7 +55,7 @@ export default function TestCallPage() {
             } else {
                 setError(data.error || 'Failed to get analytics');
             }
-        } catch (err) {
+        } catch {
             setError('Network error occurred');
         } finally {
             setIsLoading(false);
@@ -117,9 +117,9 @@ export default function TestCallPage() {
                 <h3>How it works:</h3>
                 <ol>
                     <li>Enter a phone number in international format (e.g., +1234567890)</li>
-                    <li>Click "Start Call" to initiate an AI-powered call</li>
+                    <li>Click &quot;Start Call&quot; to initiate an AI-powered call</li>
                     <li>The AI will greet the caller and handle their requests</li>
-                    <li>Use "Get Analytics" to see active calls and system status</li>
+                    <li>Use &quot;Get Analytics&quot; to see active calls and system status</li>
                 </ol>
 
                 <h3>Environment Setup Required:</h3>
@@ -128,7 +128,7 @@ export default function TestCallPage() {
                     <li>TWILIO_AUTH_TOKEN - Your Twilio Auth Token</li>
                     <li>TWILIO_PHONE_NUMBER - Your Twilio phone number</li>
                     <li>OPENAI_API_KEY - Your OpenAI API key</li>
-                    <li>NEXT_PUBLIC_BASE_URL - Your app's base URL (for webhooks)</li>
+                    <li>NEXT_PUBLIC_BASE_URL - Your app&apos;s base URL (for webhooks)</li>
                 </ul>
             </div>
         </div>

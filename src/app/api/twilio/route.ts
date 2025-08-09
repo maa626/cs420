@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     twilioService.logCallActivity(callSid, 'Incoming call', { from, to, callStatus });
 
     // Create a new call session
-    const session = twilioService.createCallSession(callSid, from, to);
+    twilioService.createCallSession(callSid, from, to);
 
     // Generate the initial greeting TwiML
     const twiml = twilioService.generateGreetingTwiML();
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Handle GET requests (for testing)
   return NextResponse.json({ 
     message: 'Twilio webhook endpoint is active',

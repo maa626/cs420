@@ -1,6 +1,4 @@
-import { CallState, createCallGraph, getLastAIResponse, shouldEndCall } from '@/lib/ai-call-graph';
 import { TwilioService } from '@/lib/twilio-service';
-import { HumanMessage } from '@langchain/core/messages';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -35,25 +33,17 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Create the LangGraph workflow
-    const workflow = createCallGraph();
-
-    // Initialize the call state
-    const initialState: CallState = {
-      messages: [new HumanMessage(speechResult)],
-      currentStep: 'process_input',
-      callSessionId: session.sessionId,
-      isComplete: false,
-    };
-
-    // Process the input through the LangGraph
-    const result = await workflow.invoke(initialState);
-
-    // Get the AI response
-    const aiResponse = getLastAIResponse(result);
-
-    // Check if the call should end
-    const shouldEnd = shouldEndCall(result);
+    // For now, we'll use a simple approach without LangGraph
+    // TODO: Implement proper LangGraph integration
+    const aiResponse = `Thank you for your message: "${speechResult}". I'm here to help you. How can I assist you further?`;
+    
+    // Check if the call should end based on the speech content
+    const shouldEnd = speechResult.toLowerCase().includes('goodbye') || 
+                     speechResult.toLowerCase().includes('bye') || 
+                     speechResult.toLowerCase().includes('thank you') || 
+                     speechResult.toLowerCase().includes('thanks') ||
+                     speechResult.toLowerCase().includes('end call') ||
+                     speechResult.toLowerCase().includes('hang up');
 
     // Generate the appropriate TwiML response
     const twiml = twilioService.generateResponseTwiML(aiResponse, shouldEnd);

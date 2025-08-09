@@ -1,7 +1,4 @@
-import twilio from 'twilio';
-import { ENV_VARS } from './env-vars';
 
-const client = twilio(ENV_VARS.TWILIO_ACCOUNT_SID, ENV_VARS.TWILIO_AUTH_TOKEN);
 
 export interface CallSession {
   callSid: string;
@@ -91,11 +88,7 @@ export class TwilioService {
 
   // Validate Twilio webhook signature
   validateWebhookSignature(request: Request): boolean {
-    const url = new URL(request.url);
-    const params = new URLSearchParams(url.search);
-    
     const signature = request.headers.get('X-Twilio-Signature');
-    const body = request.body ? JSON.stringify(request.body) : '';
     
     if (!signature) return false;
 
@@ -105,7 +98,7 @@ export class TwilioService {
   }
 
   // Convert speech to text using Twilio's speech recognition
-  async speechToText(audioUrl: string): Promise<string> {
+  async speechToText(): Promise<string> {
     try {
       // In a real implementation, you would use Twilio's Media API
       // or a third-party service like Google Speech-to-Text
@@ -118,7 +111,7 @@ export class TwilioService {
   }
 
   // Log call activity
-  logCallActivity(callSid: string, activity: string, data?: any): void {
+  logCallActivity(callSid: string, activity: string, data?: unknown): void {
     console.log(`Call ${callSid}: ${activity}`, data);
   }
 } 
