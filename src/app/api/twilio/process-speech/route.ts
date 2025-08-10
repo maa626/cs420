@@ -1,5 +1,6 @@
 import { TwilioService } from '@/lib/twilio-service';
 import { NextRequest, NextResponse } from 'next/server';
+import { handleCallTurn } from '@/lib/ai-call-graph';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,17 +34,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // For now, we'll use a simple approach without LangGraph
-    // TODO: Implement proper LangGraph integration
-    const aiResponse = `Thank you for your message: "${speechResult}". I'm here to help you. How can I assist you further?`;
-    
-    // Check if the call should end based on the speech content
-    const shouldEnd = speechResult.toLowerCase().includes('goodbye') || 
-                     speechResult.toLowerCase().includes('bye') || 
-                     speechResult.toLowerCase().includes('thank you') || 
-                     speechResult.toLowerCase().includes('thanks') ||
-                     speechResult.toLowerCase().includes('end call') ||
-                     speechResult.toLowerCase().includes('hang up');
+    // Use the multi-agent orchestrator
+    const { aiResponse, shouldEnd } = await handleCallTurn(callSid, speechResult);
 
     // Generate the appropriate TwiML response
     const twiml = twilioService.generateResponseTwiML(aiResponse, shouldEnd);
@@ -51,7 +43,7 @@ export async function POST(request: NextRequest) {
     // If the call is ending, clean up the session
     if (shouldEnd) {
       twilioService.endCallSession(callSid);
-      twilioService.logCallActivity(callSid, 'Call ended', { reason: 'User requested end' });
+      twilioService.logCallActivity(callSid, 'Call ended', { reason: 'User requested end or supervisor end' });
     }
 
     return new NextResponse(twiml, {
@@ -80,4 +72,4 @@ export async function POST(request: NextRequest) {
       },
     });
   }
-} 
+}
