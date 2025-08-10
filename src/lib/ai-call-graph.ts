@@ -21,6 +21,8 @@ const llm = new ChatOpenAI({
   temperature: 0.7,
 });
 
+//Will be implementing the Agent with the tools
+
 // Simple function to process user input and generate AI response
 export async function processUserInput(userMessage: string): Promise<string> {
   try {
