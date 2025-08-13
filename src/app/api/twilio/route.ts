@@ -9,6 +9,8 @@ export async function POST(request: NextRequest) {
     const to = formData.get('To') as string;
     const callStatus = formData.get('CallStatus') as string;
 
+    console.log('Twilio webhook received:', { callSid, from, to, callStatus });
+
     const twilioService = TwilioService.getInstance();
 
     // Log the incoming call
@@ -23,6 +25,8 @@ export async function POST(request: NextRequest) {
 
     // Generate the initial greeting TwiML
     const twiml = twilioService.generateGreetingTwiML();
+    
+    console.log('Generated TwiML:', twiml);
 
     return new NextResponse(twiml, {
       status: 200,

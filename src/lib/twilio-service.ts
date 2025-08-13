@@ -129,9 +129,13 @@ export class TwilioService {
     return `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="alice">Hello! Welcome to our AI assistant. I'm here to help you with your inquiries. How can I assist you today?</Say>
-  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="auto" language="en-US">
-    <Say voice="alice">Please speak after the beep.</Say>
+  <Pause length="1"/>
+  <Say voice="alice">Beep.</Say>
+  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
+    <Say voice="alice">Please speak now.</Say>
   </Gather>
+  <Say voice="alice">I didn't hear anything. Please call back when you're ready to speak.</Say>
+  <Hangup/>
 </Response>`;
   }
 
@@ -148,9 +152,13 @@ export class TwilioService {
     return `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="alice">${aiResponse}</Say>
-  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="auto" language="en-US">
-    <Say voice="alice">Please speak after the beep.</Say>
+  <Pause length="1"/>
+  <Say voice="alice">Beep.</Say>
+  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
+    <Say voice="alice">Please speak now.</Say>
   </Gather>
+  <Say voice="alice">I didn't hear anything. Please call back when you're ready to speak.</Say>
+  <Hangup/>
 </Response>`;
   }
 
@@ -159,9 +167,13 @@ export class TwilioService {
     return `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="alice">I'm sorry, I didn't catch that. Could you please repeat your question?</Say>
-  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="auto" language="en-US">
-    <Say voice="alice">Please speak after the beep.</Say>
+  <Pause length="1"/>
+  <Say voice="alice">Beep.</Say>
+  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
+    <Say voice="alice">Please speak now.</Say>
   </Gather>
+  <Say voice="alice">I didn't hear anything. Please call back when you're ready to speak.</Say>
+  <Hangup/>
 </Response>`;
   }
 

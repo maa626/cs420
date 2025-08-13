@@ -68,9 +68,13 @@ export async function POST(request: NextRequest) {
     const errorTwiML = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="alice">I'm sorry, there was an error processing your request. Please try again.</Say>
-  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="auto" language="en-US">
-    <Say voice="alice">Please speak after the beep.</Say>
+  <Pause length="1"/>
+  <Say voice="alice">Beep.</Say>
+  <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
+    <Say voice="alice">Please speak now.</Say>
   </Gather>
+  <Say voice="alice">I didn't hear anything. Please call back when you're ready to speak.</Say>
+  <Hangup/>
 </Response>`;
 
     return new NextResponse(errorTwiML, {
