@@ -17,11 +17,10 @@ export async function POST(request: NextRequest) {
       confidence: parseFloat(confidence) 
     });
 
-    // Get the call session
-    const session = twilioService.getCallSession(callSid);
-    if (!session) {
-      throw new Error('Call session not found');
-    }
+    // Get or create the call session (resilient approach)
+    const session = twilioService.getOrCreateCallSession(callSid);
+    console.log('Session found/created for callSid:', callSid);
+    console.log('Available sessions:', Array.from(twilioService['activeCalls'].keys()));
 
     // If no speech was detected, ask the user to repeat
     if (!speechResult || speechResult.trim() === '') {
@@ -69,7 +68,6 @@ export async function POST(request: NextRequest) {
 <Response>
   <Say voice="alice">I'm sorry, there was an error processing your request. Please try again.</Say>
   <Pause length="1"/>
-  <Say voice="alice">Beep.</Say>
   <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
     <Say voice="alice">Please speak now.</Say>
   </Gather>

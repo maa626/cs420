@@ -55,68 +55,68 @@ export class TwilioService {
     return this.activeCalls.get(callSid);
   }
 
+  // Get or create call session (resilient method)
+  getOrCreateCallSession(callSid: string, from: string = 'unknown', to: string = 'unknown'): CallSession {
+    let session = this.activeCalls.get(callSid);
+    if (!session) {
+      console.log(`Creating new session for callSid: ${callSid}`);
+      session = this.createCallSession(callSid, from, to);
+    }
+    return session;
+  }
+
   // Add message to conversation history
   addMessageToHistory(callSid: string, role: 'user' | 'assistant', content: string): void {
-    const session = this.activeCalls.get(callSid);
-    if (session) {
-      session.conversationHistory.push({
-        role,
-        content,
-        timestamp: new Date(),
-      });
-    }
+    const session = this.getOrCreateCallSession(callSid);
+    session.conversationHistory.push({
+      role,
+      content,
+      timestamp: new Date(),
+    });
   }
 
   // Get conversation history for a call
   getConversationHistory(callSid: string): Array<{ role: 'user' | 'assistant'; content: string; timestamp: Date }> {
-    const session = this.activeCalls.get(callSid);
-    return session?.conversationHistory || [];
+    const session = this.getOrCreateCallSession(callSid);
+    return session.conversationHistory;
   }
 
   // Update current step in session
   updateCurrentStep(callSid: string, step: string): void {
-    const session = this.activeCalls.get(callSid);
-    if (session) {
-      session.currentStep = step;
-    }
+    const session = this.getOrCreateCallSession(callSid);
+    session.currentStep = step;
   }
 
   // Update customer info in session
   updateCustomerInfo(callSid: string, info: { name?: string; phone?: string; email?: string }): void {
-    const session = this.activeCalls.get(callSid);
-    if (session) {
-      session.customerInfo = { ...session.customerInfo, ...info };
-    }
+    const session = this.getOrCreateCallSession(callSid);
+    session.customerInfo = { ...session.customerInfo, ...info };
   }
 
   // Start a test
   startTest(callSid: string, testType: 'rapid_step_test' | 'risk_score'): void {
-    const session = this.activeCalls.get(callSid);
-    if (session) {
-      session.testState = {
-        isActive: true,
-        startTime: new Date(),
-        testType,
-      };
-    }
+    const session = this.getOrCreateCallSession(callSid);
+    session.testState = {
+      isActive: true,
+      startTime: new Date(),
+      testType,
+    };
   }
 
   // Complete a test
   completeTest(callSid: string): void {
-    const session = this.activeCalls.get(callSid);
-    if (session) {
-      session.testState = {
-        isActive: false,
-        startTime: session.testState?.startTime,
-        testType: session.testState?.testType,
-      };
-    }
+    const session = this.getOrCreateCallSession(callSid);
+    session.testState = {
+      isActive: false,
+      startTime: session.testState?.startTime,
+      testType: session.testState?.testType,
+    };
   }
 
   // Get test state
   getTestState(callSid: string): { isActive: boolean; startTime?: Date; testType?: string } | null {
-    const session = this.activeCalls.get(callSid);
-    return session?.testState || null;
+    const session = this.getOrCreateCallSession(callSid);
+    return session.testState || null;
   }
 
   // End call session
@@ -130,7 +130,6 @@ export class TwilioService {
 <Response>
   <Say voice="alice">Hello! Welcome to our AI assistant. I'm here to help you with your inquiries. How can I assist you today?</Say>
   <Pause length="1"/>
-  <Say voice="alice">Beep.</Say>
   <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
     <Say voice="alice">Please speak now.</Say>
   </Gather>
@@ -153,7 +152,6 @@ export class TwilioService {
 <Response>
   <Say voice="alice">${aiResponse}</Say>
   <Pause length="1"/>
-  <Say voice="alice">Beep.</Say>
   <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
     <Say voice="alice">Please speak now.</Say>
   </Gather>
@@ -168,7 +166,6 @@ export class TwilioService {
 <Response>
   <Say voice="alice">I'm sorry, I didn't catch that. Could you please repeat your question?</Say>
   <Pause length="1"/>
-  <Say voice="alice">Beep.</Say>
   <Gather input="speech" action="/api/twilio/process-speech" method="POST" speechTimeout="3" language="en-US" timeout="10">
     <Say voice="alice">Please speak now.</Say>
   </Gather>
@@ -212,8 +209,7 @@ export class TwilioService {
     currentStep?: string;
     customerInfo?: { name?: string; phone?: string; email?: string };
   } | null {
-    const session = this.activeCalls.get(callSid);
-    if (!session) return null;
+    const session = this.getOrCreateCallSession(callSid);
     
     return {
       history: session.conversationHistory,

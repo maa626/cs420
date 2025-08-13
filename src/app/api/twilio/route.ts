@@ -17,7 +17,8 @@ export async function POST(request: NextRequest) {
     twilioService.logCallActivity(callSid, 'Incoming call', { from, to, callStatus });
 
     // Create a new call session
-    twilioService.createCallSession(callSid, from, to);
+    const session = twilioService.createCallSession(callSid, from, to);
+    console.log('Created session:', { callSid, sessionId: session.sessionId });
 
     // Add initial greeting to conversation history
     const greetingMessage = "Hello! Welcome to our AI assistant. I'm here to help you with your inquiries. How can I assist you today?";
