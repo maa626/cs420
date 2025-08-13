@@ -1,6 +1,6 @@
+import { handleCallTurn } from '@/lib/ai-call-graph';
 import { TwilioService } from '@/lib/twilio-service';
 import { NextRequest, NextResponse } from 'next/server';
-import { handleCallTurn } from '@/lib/ai-call-graph';
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,11 +34,19 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Use the multi-agent orchestrator
+    // Use the multi-agent orchestrator with conversation history
     const { aiResponse, shouldEnd } = await handleCallTurn(callSid, speechResult);
 
     // Generate the appropriate TwiML response
     const twiml = twilioService.generateResponseTwiML(aiResponse, shouldEnd);
+
+    // Log the conversation turn
+    twilioService.logCallActivity(callSid, 'Conversation turn processed', { 
+      userMessage: speechResult, 
+      aiResponse, 
+      shouldEnd,
+      historyLength: twilioService.getConversationHistory(callSid).length
+    });
 
     // If the call is ending, clean up the session
     if (shouldEnd) {

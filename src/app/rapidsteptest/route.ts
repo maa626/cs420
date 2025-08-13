@@ -1,9 +1,8 @@
-import { ENV_VARS } from '@/lib/env-vars';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '../../lib/authenticate';
+import { createRapidStepTest, StepTest } from '../../lib/rapidStepTEst';
 import getSessionToken from '../../lib/session-token';
-import createStep from '../../lib/steps';
 
 // Schema for step data
 const StepDataSchema = z.object({
@@ -35,46 +34,18 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: result.error.errors[0].message }, { status: 422 });
         }
 
-        // Forward request to STEDI API
-        const response = await fetch(`${ENV_VARS.STEDI_API_URL}/rapidsteptest`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'suresteps.session.token': sessionToken,
-            },
-            body: JSON.stringify(result.data),
-        });
-
-        if (!response.ok) {
-            let errorMessage = 'Failed to save step data';
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.error || errorMessage;
-            } catch {
-                // If we can't parse the error response, use the default message
-            }
-            return NextResponse.json({ error: errorMessage }, { status: response.status });
-        }
-
-        const step = await createStep({
-            customer: result.data.customer,
-            device_id: result.data.deviceId,
-            started_at: new Date(result.data.startTime),
-            ended_at: new Date(result.data.stopTime ?? result.data.startTime),
-            points: result.data.stepPoints,
-        });
-
-        if (!step) {
-            return NextResponse.json({ error: 'Failed to save step data' }, { status: 500 });
-        }
-
-        // Return "Saved" as text with 200 status code
-        return new NextResponse('Saved', {
-            status: 200,
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-        });
+        return await createRapidStepTest(sessionToken, result.data as StepTest)
+            .then(() => {
+                return new NextResponse('Saved', {
+                    status: 200,
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                });
+            })
+            .catch((error) => {
+                return NextResponse.json({ error: error.message }, { status: error.status });
+            });
     } catch (error) {
         console.error('Failed to save step data:', error);
         return NextResponse.json(

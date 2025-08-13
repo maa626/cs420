@@ -1,5 +1,3 @@
-
-
 export interface CallSession {
   callSid: string;
   sessionId: string;
@@ -7,6 +5,22 @@ export interface CallSession {
   to: string;
   status: string;
   startTime: Date;
+  conversationHistory: Array<{
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp: Date;
+  }>;
+  currentStep?: string;
+  customerInfo?: {
+    name?: string;
+    phone?: string;
+    email?: string;
+  };
+  testState?: {
+    isActive: boolean;
+    startTime?: Date;
+    testType?: 'rapid_step_test' | 'risk_score';
+  };
 }
 
 export class TwilioService {
@@ -29,6 +43,7 @@ export class TwilioService {
       to,
       status: 'active',
       startTime: new Date(),
+      conversationHistory: [],
     };
 
     this.activeCalls.set(callSid, session);
@@ -38,6 +53,70 @@ export class TwilioService {
   // Get call session
   getCallSession(callSid: string): CallSession | undefined {
     return this.activeCalls.get(callSid);
+  }
+
+  // Add message to conversation history
+  addMessageToHistory(callSid: string, role: 'user' | 'assistant', content: string): void {
+    const session = this.activeCalls.get(callSid);
+    if (session) {
+      session.conversationHistory.push({
+        role,
+        content,
+        timestamp: new Date(),
+      });
+    }
+  }
+
+  // Get conversation history for a call
+  getConversationHistory(callSid: string): Array<{ role: 'user' | 'assistant'; content: string; timestamp: Date }> {
+    const session = this.activeCalls.get(callSid);
+    return session?.conversationHistory || [];
+  }
+
+  // Update current step in session
+  updateCurrentStep(callSid: string, step: string): void {
+    const session = this.activeCalls.get(callSid);
+    if (session) {
+      session.currentStep = step;
+    }
+  }
+
+  // Update customer info in session
+  updateCustomerInfo(callSid: string, info: { name?: string; phone?: string; email?: string }): void {
+    const session = this.activeCalls.get(callSid);
+    if (session) {
+      session.customerInfo = { ...session.customerInfo, ...info };
+    }
+  }
+
+  // Start a test
+  startTest(callSid: string, testType: 'rapid_step_test' | 'risk_score'): void {
+    const session = this.activeCalls.get(callSid);
+    if (session) {
+      session.testState = {
+        isActive: true,
+        startTime: new Date(),
+        testType,
+      };
+    }
+  }
+
+  // Complete a test
+  completeTest(callSid: string): void {
+    const session = this.activeCalls.get(callSid);
+    if (session) {
+      session.testState = {
+        isActive: false,
+        startTime: session.testState?.startTime,
+        testType: session.testState?.testType,
+      };
+    }
+  }
+
+  // Get test state
+  getTestState(callSid: string): { isActive: boolean; startTime?: Date; testType?: string } | null {
+    const session = this.activeCalls.get(callSid);
+    return session?.testState || null;
   }
 
   // End call session
@@ -113,5 +192,21 @@ export class TwilioService {
   // Log call activity
   logCallActivity(callSid: string, activity: string, data?: unknown): void {
     console.log(`Call ${callSid}: ${activity}`, data);
+  }
+
+  // Get current conversation state for debugging
+  getConversationState(callSid: string): {
+    history: Array<{ role: 'user' | 'assistant'; content: string; timestamp: Date }>;
+    currentStep?: string;
+    customerInfo?: { name?: string; phone?: string; email?: string };
+  } | null {
+    const session = this.activeCalls.get(callSid);
+    if (!session) return null;
+    
+    return {
+      history: session.conversationHistory,
+      currentStep: session.currentStep,
+      customerInfo: session.customerInfo,
+    };
   }
 } 

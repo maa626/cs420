@@ -17,6 +17,10 @@ export async function POST(request: NextRequest) {
     // Create a new call session
     twilioService.createCallSession(callSid, from, to);
 
+    // Add initial greeting to conversation history
+    const greetingMessage = "Hello! Welcome to our AI assistant. I'm here to help you with your inquiries. How can I assist you today?";
+    twilioService.addMessageToHistory(callSid, 'assistant', greetingMessage);
+
     // Generate the initial greeting TwiML
     const twiml = twilioService.generateGreetingTwiML();
 
