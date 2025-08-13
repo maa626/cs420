@@ -224,6 +224,9 @@ or
 or
 {"action":"end"}`.trim();
 
+  console.log('sys', sys);
+  console.log('userMessage', userMessage);
+
   const res = await llm.invoke([
     { role: 'system', content: sys },
     { role: 'user', content: `User: ${userMessage}` },
