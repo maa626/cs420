@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '../../lib/authenticate';
-import { createRapidStepTest, StepTest } from '../../lib/rapidStepTEst';
+import { createRapidStepTest, StepTest } from '../../lib/rapidStepTest';
 import getSessionToken from '../../lib/session-token';
 
 // Schema for step data
