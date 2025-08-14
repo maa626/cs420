@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '../../../lib/authenticate';
-import saveRiskScore, { fetchRiskScoreFromSTEDI as fetchRiskScore } from '../../../lib/riskScore';
+import saveRiskScore, { fetchRiskScore } from '../../../lib/riskScore';
 import getSessionToken from '../../../lib/session-token';
 
 // Schema for email parameter
