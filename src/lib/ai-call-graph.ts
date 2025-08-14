@@ -134,7 +134,7 @@ async function rapidStepTestTool(
           testTime,
           stepPoints,
           totalSteps: stepPoints.filter(p => p === 1).length,
-          deviceId: 'twilio-voice-' + callSid,
+          deviceId: '000',
         };
 
         // Call the createRapidStepTest function
