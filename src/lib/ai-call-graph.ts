@@ -63,17 +63,6 @@ type SupervisorDecision = {
 
 // Risk Score tool using STEDI API
 async function riskScoreTool(input: string, conversationHistory: Array<{ role: 'user' | 'assistant'; content: string; timestamp: Date }>): Promise<string> {
-  // Check if we're in the middle of a risk assessment
-  const recentMessages = conversationHistory.slice(-4);
-  const hasAskedForRiskScore = recentMessages.some(msg => 
-    msg.role === 'user' && 
-    (msg.content.toLowerCase().includes('risk') || msg.content.toLowerCase().includes('score'))
-  );
-
-  if (hasAskedForRiskScore) {
-    return `I'd be happy to help assess your risk score. To get started, could you tell me your age and if you have any existing health conditions?`;
-  }
-
   try {
     // Use fake customer email and session token to fetch risk score from STEDI
     const fakeEmail = 'test.customer@example.com';
@@ -83,12 +72,11 @@ async function riskScoreTool(input: string, conversationHistory: Array<{ role: '
     
     // Extract the risk score from the response
     const score = riskScoreData.score || riskScoreData.riskScore || 'medium';
-    const riskLevel = riskScoreData.riskLevel || 'medium';
     
-    return `Thank you for that information. I've calculated your risk score based on what you've shared. Your current risk score is ${score} (${riskLevel} risk level). Would you like me to ask a few more questions to refine this assessment or help you with anything else?`;
+    return `I've retrieved your risk score from our system. Your current risk score is ${score}. Is there anything else you'd like to know about your health assessment?`;
   } catch (error) {
     console.error('Error fetching risk score from STEDI:', error);
-    return `Thank you for that information. I'm calculating your risk score based on what you've shared. Your provisional risk score appears to be medium. Would you like me to ask a few more questions to refine this assessment?`;
+    return `I'm sorry, I'm having trouble retrieving your risk score at the moment. Please try again later or contact support if the issue persists.`;
   }
 }
 
