@@ -1,6 +1,7 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { ENV_VARS } from './env-vars';
 import { createRapidStepTest, StepTest } from './rapidStepTest';
+import { fetchRiskScore } from './riskScore';
 import { TwilioService } from './twilio-service';
 
 // Define the state structure for our conversation
@@ -60,7 +61,7 @@ type SupervisorDecision = {
   step?: string;
 };
 
-// Risk Score tool (stub; replace with your real logic/API)
+// Risk Score tool using STEDI API
 async function riskScoreTool(input: string, conversationHistory: Array<{ role: 'user' | 'assistant'; content: string; timestamp: Date }>): Promise<string> {
   // Check if we're in the middle of a risk assessment
   const recentMessages = conversationHistory.slice(-4);
@@ -68,25 +69,27 @@ async function riskScoreTool(input: string, conversationHistory: Array<{ role: '
     msg.role === 'user' && 
     (msg.content.toLowerCase().includes('risk') || msg.content.toLowerCase().includes('score'))
   );
-  
-  const hasProvidedInfo = recentMessages.some(msg => 
-    msg.role === 'user' && 
-    (msg.content.toLowerCase().includes('age') || 
-     msg.content.toLowerCase().includes('weight') || 
-     msg.content.toLowerCase().includes('height') ||
-     msg.content.toLowerCase().includes('condition'))
-  );
-
-  if (hasProvidedInfo) {
-    return `Thank you for that information. I'm calculating your risk score based on what you've shared. Your provisional risk score appears to be medium. Would you like me to ask a few more questions to refine this assessment?`;
-  }
 
   if (hasAskedForRiskScore) {
     return `I'd be happy to help assess your risk score. To get started, could you tell me your age and if you have any existing health conditions?`;
   }
 
-  // TODO: replace with real risk score logic or API
-  return `I can help with your risk score. To get started, could you tell me your age and if you have any existing health conditions?`;
+  try {
+    // Use fake customer email and session token to fetch risk score from STEDI
+    const fakeEmail = 'test.customer@example.com';
+    const fakeSessionToken = '96d0fd2c-0451-4191-bc90-042fb5073c02';
+    
+    const riskScoreData = await fetchRiskScore(fakeEmail, fakeSessionToken);
+    
+    // Extract the risk score from the response
+    const score = riskScoreData.score || riskScoreData.riskScore || 'medium';
+    const riskLevel = riskScoreData.riskLevel || 'medium';
+    
+    return `Thank you for that information. I've calculated your risk score based on what you've shared. Your current risk score is ${score} (${riskLevel} risk level). Would you like me to ask a few more questions to refine this assessment or help you with anything else?`;
+  } catch (error) {
+    console.error('Error fetching risk score from STEDI:', error);
+    return `Thank you for that information. I'm calculating your risk score based on what you've shared. Your provisional risk score appears to be medium. Would you like me to ask a few more questions to refine this assessment?`;
+  }
 }
 
 // Rapid Step Test tool (stub; replace with your real logic/API)
@@ -137,7 +140,7 @@ async function rapidStepTestTool(
         }
 
         const fakeStepTest: StepTest = {
-          customer: 'test@example.com', // You'll need to get this from the call session
+          customer: 'test_user@example.com', // You'll need to get this from the call session
           startTime,
           stopTime,
           testTime,
@@ -148,7 +151,7 @@ async function rapidStepTestTool(
 
         // Call the createRapidStepTest function
         // Note: You'll need to provide a session token - for now using a placeholder
-        const sessionToken = 'fake-session-token'; // TODO: Get real session token
+        const sessionToken = '96d0fd2c-0451-4191-bc90-042fb5073c02'; // TODO: Get real session token
         await createRapidStepTest(sessionToken, fakeStepTest);
         
         // Mark test as completed
